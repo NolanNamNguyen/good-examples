@@ -4,6 +4,7 @@ dist/
 .next
 yarn.lock
 jsconfig.json
+out
 # Compiled Java class files
 *.class
 
