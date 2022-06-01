@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   eslint: {
-    dirs: ['redux'], // Only run ESLint on the 'pages' and 'utils' directories during production builds (next build)
+    dirs: ['.'],
   },
 };
 

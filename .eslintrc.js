@@ -1,29 +1,29 @@
-const fs = require('fs');
-const path = require('path');
-
-const prettierOptions = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '.prettierrc'), 'utf8'),
-);
-
 module.exports = {
-  extends: ['prettier', 'next/core-web-vitals'],
-  plugins: ['prettier', 'redux-saga'],
-  ignorePatterns: ['node_modules/**', '.next/**', '**/vendor/*.js'],
   env: {
-    jest: true,
     browser: true,
+    es2021: true,
     node: true,
-    es6: true,
+  },
+  plugins: ['react', 'import'],
+  extends: ['plugin:react/recommended', 'google', 'prettier'],
+  ignorePatterns: ['out', '.next', 'node_modules'],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
   rules: {
-    'prettier/prettier': ['error', prettierOptions],
-    'arrow-body-style': [2, 'as-needed'],
+    'require-jsdoc': 0,
+    'react/prop-types': 0,
     'import/no-unresolved': 2,
-    'no-console': 1,
-    'no-unused-vars': 2,
-    'prefer-template': 2,
-    'redux-saga/no-yield-in-race': 2,
-    'redux-saga/yield-effects': 2,
     'no-undef': 2,
+    camelcase: 0,
   },
 };

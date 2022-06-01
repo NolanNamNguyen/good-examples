@@ -9,7 +9,6 @@ const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
   reducer: rootReducers,
   devTools: process.env.NODE_ENV !== 'production',
-  // eslint-disable-next-line no-shadow
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false, serializableCheck: false }).concat(
       sagaMiddleware,
