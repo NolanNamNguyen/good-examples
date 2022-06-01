@@ -5,8 +5,6 @@ import rootReducers from './rootReducers';
 import rootSaga from './rootSaga';
 
 const sagaMiddleware = createSagaMiddleware();
-const a = 'aosdijf';
-asdfasdf
 
 const store = configureStore({
   reducer: rootReducers,
@@ -21,5 +19,3 @@ const store = configureStore({
 sagaMiddleware.run(rootSaga);
 
 export default store;
-a
-asdfsadf

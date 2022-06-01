@@ -6,8 +6,9 @@ const prettierOptions = JSON.parse(
 );
 
 module.exports = {
-  extends: ['next', 'prettier', 'next/core-web-vitals'],
+  extends: ['prettier', 'next/core-web-vitals'],
   plugins: ['prettier', 'redux-saga'],
+  ignorePatterns: ['node_modules/**', '.next/**', '**/vendor/*.js'],
   env: {
     jest: true,
     browser: true,
