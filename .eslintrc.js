@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  plugins: ['react', 'import'],
+  plugins: ['react', 'import', 'prettier'],
   extends: ['plugin:react/recommended', 'google', 'prettier'],
   ignorePatterns: ['out', '.next', 'node_modules'],
   settings: {
@@ -24,6 +24,7 @@ module.exports = {
     'react/prop-types': 0,
     'import/no-unresolved': 2,
     'no-undef': 2,
+    'prettier/prettier': 2,
     camelcase: 0,
   },
 };

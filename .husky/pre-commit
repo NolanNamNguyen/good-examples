@@ -1,4 +1,14 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run lint
+npm run lint ||
+(
+        echo ' 😤🏀👋😤  ESLint Check Failed. Make the required changes listed above, add changes and try to commit again. 😤🏀👋😤 '
+        false; 
+)
+
+npm run build ||
+(
+        echo '❌👷🔨❌ Next build failed: View the errors above to see why. ❌👷🔨❌'
+        false;
+)
