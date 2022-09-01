@@ -2,8 +2,6 @@
 node_modules/
 dist/
 .next
-yarn.lock
-jsconfig.json
 out
 # Compiled Java class files
 *.class
@@ -13,13 +11,6 @@ out
 
 # Log files
 *.log
-
-# Package files
-*.jar
-
-# Maven
-target/
-dist/
 
 # JetBrains IDE
 .idea/

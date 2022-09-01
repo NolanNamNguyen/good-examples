@@ -1,15 +1,14 @@
 import { all, takeEvery } from 'redux-saga/effects';
-// import Api from '../../config/api';
 
-import { removeAllLogs } from '../slices/commonSlice';
+import { testSagaFunction } from '../slices/commonSlice';
 
-function* uploadImageSaga(params) {
+function* testThisSaga(params) {
   // eslint-disable-next-line no-console
-  console.log('params', params);
+  console.log('Im testing', params);
 }
 
 function* commonSaga() {
-  yield all([takeEvery(removeAllLogs.type, uploadImageSaga)]);
+  yield all([takeEvery(testSagaFunction.type, testThisSaga)]);
 }
 
 export default commonSaga;

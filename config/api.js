@@ -4,8 +4,7 @@ import Router from 'next/router';
 import { signOut } from 'next-auth';
 
 import { API_URL } from './setting';
-import { ROUTER_LOGIN } from '../shared/router/router';
-// import { LANGUAGE_JAPANESE } from '../constant/language';
+import { ROUTER_LOGIN } from '../shared/routes/routes';
 
 const THROTTLE_DELAY = 1000;
 

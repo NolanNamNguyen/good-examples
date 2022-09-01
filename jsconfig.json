@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@HOC/*": ["HOC/*"],
+      "@hooks/*": ["Hooks/*"],
+      "@reduxSlices/*": ["redux/slices/*"],
+      "@utils": ["shared/utils/utils.js"],
+      "@routes": ["shared/routes/routes.js"]
+    }
+  }
+}

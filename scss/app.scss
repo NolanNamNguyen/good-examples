@@ -1,0 +1,30 @@
+//
+// Import all the scss files
+// About the scss structure, read: https://www.webdesignerdepot.com/2020/12/2-smartest-ways-to-structure-sass/
+//
+
+//TailWind
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Abstract files
+@import 'abstract/variables';
+
+// Vendor Files
+
+
+// Core files
+// About this folder, read: https://elad.medium.com/normalize-css-or-css-reset-9d75175c5d1e
+@import 'core/typography';
+
+// Components
+@import 'components/loading';
+
+
+// Layout
+@import 'layout/main';
+
+// Pages
+
+

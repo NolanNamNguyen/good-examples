@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isLoading: false,
-  logs: [],
+  logs: '',
   saving: false,
 };
 
@@ -10,8 +10,8 @@ export const commonSlice = createSlice({
   name: 'commonSlice',
   initialState,
   reducers: {
-    removeAllLogs: (state) => {
-      state.logs = [];
+    testSagaFunction: (state) => {
+      state.logs = 'Installed successfully';
     },
     logError: {
       reducer: (state, action) => {
@@ -38,6 +38,6 @@ export const commonSlice = createSlice({
   },
 });
 
-export const { removeAllLogs, logError } = commonSlice.actions;
+export const { testSagaFunction, logError } = commonSlice.actions;
 
 export default commonSlice.reducer;
