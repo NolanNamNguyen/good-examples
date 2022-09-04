@@ -1,24 +1,15 @@
 import axios from 'axios';
 import { mergeWith, throttle, isEmpty } from 'lodash';
 import Router from 'next/router';
-import { signOut } from 'next-auth';
-
+import { signOut } from 'next-auth/react';
+import { ROUTER_LOGIN } from '@routes/routes';
 import { API_URL } from './setting';
-import { ROUTER_LOGIN } from '../shared/routes/routes';
 
 const THROTTLE_DELAY = 1000;
 
 export const generateAppServiceToken = () => ({
-  'X-Mobile-Device-Type': process.env.HEADER_X_MOBILE_DEVICE_TYPE,
-  'X-HTTP-App-Token': 'abc',
-  'Accept-Language': 'ja',
+  // 'X-Mobile-Device-Type': process.env.HEADER_X_MOBILE_DEVICE_TYPE,
 });
-
-const customizer = (objValue, key) => {
-  if (key === 'Accept-Language') {
-    return objValue;
-  }
-};
 
 const defaultOptions = {
   withCredentials: true,
@@ -37,11 +28,7 @@ function getApi(path, options = {}, apiURL) {
 }
 
 function postApi(path, data, options = {}) {
-  const headerParams = mergeWith(
-    options.headers,
-    generateAppServiceToken(),
-    customizer,
-  );
+  const headerParams = mergeWith(options.headers, generateAppServiceToken());
 
   return axios.post(`${API_URL}/${path.replace(/^\//, '')}`, data, {
     ...defaultOptions,

@@ -6,8 +6,9 @@
       "@HOC/*": ["HOC/*"],
       "@hooks/*": ["Hooks/*"],
       "@reduxSlices/*": ["redux/slices/*"],
-      "@utils": ["shared/utils/utils.js"],
-      "@routes": ["shared/routes/routes.js"]
+      "@utils/*": ["shared/utils/*"],
+      "@routes/*": ["shared/routes/*"],
+      "@constant/*": ["shared/constant/*"]
     }
   }
 }
