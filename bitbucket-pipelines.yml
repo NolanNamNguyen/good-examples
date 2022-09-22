@@ -1,0 +1,61 @@
+image: node:10.16.0
+
+definitions:
+  steps:
+    - step: &build
+        name: Run build
+        caches:
+          - node
+        script:
+          - npm install
+          - BUILD_PATH=./build_student REACT_APP_MODE=STUDENT REACT_APP_ENV=stg REACT_APP_API_ENDPOINT=https://stg-ext-gateway.seminar.vcube.com npm run build
+          - BUILD_PATH=./build_admin REACT_APP_MODE=ADMIN REACT_APP_ENV=stg REACT_APP_API_ENDPOINT=https://stg-ext-gateway.seminar.vcube.com npm run build
+          - BUILD_PATH=./build_teacher REACT_APP_MODE=TEACHER REACT_APP_ENV=stg REACT_APP_API_ENDPOINT=https://stg-ext-gateway.seminar.vcube.com npm run build
+        artifacts:
+          - build_student/**
+          - build_admin/**
+          - build_teacher/**
+    - step: &deploy-to-s3-and-clear-cache
+        name: Deploy to S3 and clear cache CloudFront
+        image: python
+        script:
+          - pip install awscli
+          - aws configure set aws_access_key_id $AWS_ACCESS_KEY
+          - aws configure set aws_secret_access_key $AWS_SECRET_KEY
+          - aws configure set region $AWS_REGION
+          - aws s3 rm s3://$S3_BUCKET/ --recursive
+          - aws s3 cp $BUILD_PATH s3://$S3_BUCKET/ --recursive
+          - aws cloudfront create-invalidation --distribution-id $CLOUD_FRONT_DISTRIBUTION_ID --paths "/*"
+
+pipelines:
+  branches:
+    develop:
+      - step: *build
+      - parallel:
+          - step:
+              <<: *deploy-to-s3-and-clear-cache
+              name: Deploy Student Page
+              deployment: test_student_page
+          - step:
+              <<: *deploy-to-s3-and-clear-cache
+              name: Deploy Admin Page
+              deployment: test_admin_page
+          - step:
+              <<: *deploy-to-s3-and-clear-cache
+              name: Deploy Teacher Page
+              deployment: test_teacher_page
+    staging:
+      - step: *build
+      - parallel:
+          - step:
+              <<: *deploy-to-s3-and-clear-cache
+              name: Deploy Student Page
+              deployment: stag_student_page
+          - step:
+              <<: *deploy-to-s3-and-clear-cache
+              name: Deploy Admin Page
+              deployment: stag_admin_page
+          - step:
+              <<: *deploy-to-s3-and-clear-cache
+              name: Deploy Teacher Page
+              deployment: stag_teacher_page
