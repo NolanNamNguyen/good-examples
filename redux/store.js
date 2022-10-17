@@ -4,6 +4,7 @@ import { createWrapper } from 'next-redux-wrapper';
 
 import rootReducers from './rootReducers';
 import rootSaga from './rootSaga';
+import { injectStore } from '@apiConfig';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -17,9 +18,8 @@ const store = configureStore({
 
 const makeStore = () => {
   sagaMiddleware.run(rootSaga);
+  injectStore(store);
   return store;
 };
 
 export const wrapper = createWrapper(makeStore, { debug: false });
-
-export default store;

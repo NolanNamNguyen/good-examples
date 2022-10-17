@@ -8,6 +8,7 @@
       "@reduxSlices/*": ["redux/slices/*"],
       "@utils/*": ["shared/utils/*"],
       "@routes/*": ["shared/routes/*"],
+      "@apiConfig": ["config/api.js"],
       "@constant/*": ["shared/constant/*"]
     }
   }

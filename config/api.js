@@ -1,23 +1,44 @@
 import axios from 'axios';
-import { mergeWith, throttle, isEmpty } from 'lodash';
-import Router from 'next/router';
-import { signOut } from 'next-auth/react';
-import { ROUTER_LOGIN } from '@routes/routes';
-import { API_URL } from './setting';
+import isEmpty from 'lodash/isEmpty';
+import throttle from 'lodash/throttle';
+import mergeWith from 'lodash/mergeWith';
+import {
+  refreshToken,
+  invokeNavigate,
+  getUserProfileFailed,
+  getUserProfile,
+} from '@reduxSlices/authSlice';
+import Cookies from 'js-cookie';
+import { API_URL, CLIENT_PASS, CLIENT_ID } from './setting';
+import { COOKIE_FIELD } from '@constant/common';
 
 const THROTTLE_DELAY = 1000;
 
+let reduxStore;
+
+export const injectStore = (_store) => {
+  reduxStore = _store;
+};
+
 export const generateAppServiceToken = () => ({
   // 'X-Mobile-Device-Type': process.env.HEADER_X_MOBILE_DEVICE_TYPE,
+  Authorization: `Bearer ${Cookies.get(COOKIE_FIELD.access_token)}`,
 });
 
+export const grantTokenConfig = {
+  auth: {
+    username: CLIENT_ID,
+    password: CLIENT_PASS,
+  },
+};
+
 const defaultOptions = {
-  withCredentials: true,
+  // withCredentials: true,
 };
 
 // eslint-disable-next-line default-param-last
 function getApi(path, options = {}, apiURL) {
-  return axios.get(`${apiURL || API_URL}/${path.replace(/^\//, '')}`, {
+  return axios.get(`${apiURL || API_URL}${path}`, {
     ...defaultOptions,
     ...options,
     headers: {
@@ -30,15 +51,15 @@ function getApi(path, options = {}, apiURL) {
 function postApi(path, data, options = {}) {
   const headerParams = mergeWith(options.headers, generateAppServiceToken());
 
-  return axios.post(`${API_URL}/${path.replace(/^\//, '')}`, data, {
+  return axios.post(`${API_URL}${path}`, data, {
     ...defaultOptions,
-    ...options,
     headers: headerParams,
+    ...options,
   });
 }
 
 function putApi(path, data, options = {}) {
-  return axios.put(`${API_URL}/${path.replace(/^\//, '')}`, data, {
+  return axios.put(`${API_URL}${path}`, data, {
     ...defaultOptions,
     ...options,
     headers: {
@@ -49,7 +70,7 @@ function putApi(path, data, options = {}) {
 }
 
 function deleteApi(path, options = {}) {
-  return axios.delete(`${API_URL}/${path.replace(/^\//, '')}`, {
+  return axios.delete(`${API_URL}${path}`, {
     ...defaultOptions,
     ...options,
     headers: {
@@ -77,7 +98,7 @@ function uploadApi(path, params, options = {}, uploadSingle = false) {
         layout_id && formData.append('layout_id', layout_id);
       });
 
-  return axios.post(`${API_URL}/${path.replace(/^\//, '')}`, formData, {
+  return axios.post(`${API_URL}${path}`, formData, {
     ...defaultOptions,
     ...options,
     headers: {
@@ -89,22 +110,47 @@ function uploadApi(path, params, options = {}, uploadSingle = false) {
 }
 
 const notAuthorizedCallback = throttle(() => {
-  signOut().then(() => Router.push(ROUTER_LOGIN, {}, { shallow: true }));
+  if (Cookies.get(COOKIE_FIELD.refresh_token)) {
+    reduxStore.dispatch(
+      refreshToken({
+        userType: Cookies.get(COOKIE_FIELD.scope_type),
+        callback: () => {
+          reduxStore.dispatch(getUserProfile({ payload: {} }));
+        },
+      }),
+    );
+    return;
+  }
+  reduxStore.dispatch(invokeNavigate(true));
 }, THROTTLE_DELAY);
+
+const forbiddenCallback = throttle(() => {
+  for (const key of Object.keys(COOKIE_FIELD)) {
+    Cookies.remove(key);
+  }
+  reduxStore.dispatch(getUserProfileFailed());
+  reduxStore.dispatch(invokeNavigate(true));
+}, THROTTLE_DELAY);
+
+const handleErrors = (serverResponse) => {
+  if (serverResponse.status === 401) {
+    notAuthorizedCallback();
+    return serverResponse;
+  }
+  if (serverResponse.status === 503) {
+    forbiddenCallback();
+    return serverResponse;
+  }
+  return null;
+};
 
 axios.interceptors.response.use(
   (response) => {
-    if (response.status === 401) {
-      notAuthorizedCallback();
-      return;
-    }
+    if (handleErrors(response)) return;
     return response;
   },
   (error) => {
-    if (error.response.status === 401) {
-      notAuthorizedCallback();
-      return error;
-    }
+    if (handleErrors(error.response)) return;
     return Promise.reject(error);
   },
 );
