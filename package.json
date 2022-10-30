@@ -48,5 +48,8 @@
     "husky": "8.0.1",
     "postcss": "8.4.16",
     "tailwindcss": "3.1.8"
+  },
+  "engines": {
+    "node": "16.18.0"
   }
 }

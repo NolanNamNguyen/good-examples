@@ -4,8 +4,8 @@ import MainLayout from '@components/MainLayout';
 
 const Index = () => {
   return (
-    <MainLayout title="E-Typing System">
-      <h2 className="m-0">E-Typing Project</h2>
+    <MainLayout title='E-Typing System'>
+      <h2 className='m-0'>E-Typing Project</h2>
     </MainLayout>
   );
 };

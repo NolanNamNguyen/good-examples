@@ -2,14 +2,30 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["components/*"],
-      "@HOC/*": ["HOC/*"],
-      "@hooks/*": ["Hooks/*"],
-      "@reduxSlices/*": ["redux/slices/*"],
-      "@utils/*": ["shared/utils/*"],
-      "@routes/*": ["shared/routes/*"],
-      "@apiConfig": ["config/api.js"],
-      "@constant/*": ["shared/constant/*"]
+      "@components/*": [
+        "components/*"
+      ],
+      "@HOC/*": [
+        "HOC/*"
+      ],
+      "@hooks/*": [
+        "Hooks/*"
+      ],
+      "@reduxSlices/*": [
+        "redux/slices/*"
+      ],
+      "@utils/*": [
+        "shared/utils/*"
+      ],
+      "@routes/*": [
+        "shared/routes/*"
+      ],
+      "@apiConfig": [
+        "config/api.js"
+      ],
+      "@constant/*": [
+        "shared/constant/*"
+      ]
     }
   }
 }
